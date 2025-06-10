@@ -1,0 +1,120 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table Users {
+  user_id integer [primary key]
+  full_name varchar
+  email varchar
+  phone varchar
+}
+
+Table UserInsight {
+  user_id integer 
+  week_count integer
+  total_messages integer
+  total_interactions integer
+}
+
+Ref: UserInsight.user_id > Users.user_id
+
+Table Pod {
+  id integer [primary key]
+  pod_name varchar
+  active boolean
+  intent varchar
+  created_at timestamp
+  expire_at timestamp
+}
+
+Table PodUsers {
+  pod_user_id integer [primary key]
+  user_id integer
+  pod_id integer
+  user_alias varchar
+}
+
+Ref: PodUsers.pod_id > Pod.id
+Ref: PodUsers.user_id > Users.user_id
+
+Table PodPosts{
+  id integer [primary key]
+  content varchar
+  pod_user_id integer
+  emotion varchar
+  like_count integer
+  created_at timestamp
+}
+
+Ref: PodPosts.pod_user_id > PodUsers.pod_user_id
+
+Table PodPostsReactions {
+  id integer [primary key]
+  post_id integer
+  pod_user_id integer
+  reaction_type varchar
+  created_at timestamp
+}
+
+Ref: PodPostsReactions.post_id > PodPosts.id
+Ref: PodPostsReactions.pod_user_id > PodUsers.pod_user_id
+
+Table PodPostComments {
+  id integer [primary key]
+  content varchar
+  post_id integer
+  pod_user_id integer
+  created_at timestamp
+}
+Ref: PodPostComments.post_id > PodPosts.id
+Ref: PodPostComments.pod_user_id > PodUsers.pod_user_id
+
+Table PodQotd {
+  id integer [primary key]
+  question varchar
+  pod_id integer
+  created_at timestamp
+}
+
+Ref: PodQotd.pod_id > Pod.id
+
+Table PodQotdReply {
+  id integer [primary key]
+  qotd_id integer
+  pod_user_id integer
+  created_at timestamp
+}
+Ref: PodQotdReply.qotd_id > PodQotd.id
+Ref: PodQotdReply.pod_user_id > PodUsers.pod_user_id
+
+Table CommunityPost {
+  id integer [primary key]
+  user_id integer
+  alias varchar
+  anonymous boolean
+  reaction_count integer
+  comments_count integer
+  created_at timestamp
+}
+
+Ref: CommunityPost.user_id > Users.user_id
+
+Table CommunityPostReaction {
+  id integer [primary key]
+  user_id integer
+  post_id integer
+  created_at timestamp
+}
+
+Ref: CommunityPostReaction.user_id > Users.user_id
+Ref: CommunityPostReaction.post_id > CommunityPost.id
+
+Table CommunityPostComment {
+  id integer [primary key]
+  user_id integer
+  post_id integer
+  comment varchar
+  created_at timestamp
+}
+
+Ref: CommunityPostComment.user_id > Users.user_id
+Ref: CommunityPostComment.post_id > CommunityPost.id
